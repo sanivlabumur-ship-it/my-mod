@@ -9,6 +9,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    # Ограничиваем память для Gradle, чтобы сервер его не убивал
+    env:
+      GRADLE_OPTS: "-Dorg.gradle.jvmargs=-Xmx3g -Dorg.gradle.workers.max=2"
+
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v4
@@ -31,7 +35,7 @@ jobs:
       run: chmod +x ./gradlew
 
     - name: Build with Gradle
-      run: ./gradlew build
+      run: ./gradlew build --no-daemon
 
     - name: Upload Finished Jar
       uses: actions/upload-artifact@v4
